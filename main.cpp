@@ -30,7 +30,7 @@ int main(int argc, char* argv[]) {
 	dir_0.normalize();
 
 	PointLight pLight1(Vec3f (0, -10, 0), Vec3f (0, 0, 1));
-    PointLight pLight2(Vec3f (0, 0, 0), Vec3f (0.5, 0.5, 0.5));
+    PointLight pLight2(Vec3f (0, 0, 0), Vec3f (0.3, 0.3, 0.3));
     PointLight pLight3(Vec3f (0, 10, 0), Vec3f (1, 0, 0));
     std::vector<PointLight> pLights = {pLight1, pLight2, pLight3};
 
@@ -68,7 +68,7 @@ int main(int argc, char* argv[]) {
 
 	if (rank == 0) {
 		std::cout << "Time: " << MPI_Wtime() - time << std::endl;
-		char pic[] = "../result.jpg";
+		char pic[] = "../result_without_trans.jpg";
 		saveImage(pic, width, height, 3, pixels);
 	}
 

@@ -10,7 +10,9 @@
 const float EPSILON = 0.0000001;
 const float FLARE_COEFF = 0.5, FLARE_POW = 100;
 const float LIGHT_BASE = 100, LIGHT_COEFF = 0.5;
-const unsigned int DEPTH = 4;
+const unsigned int DEPTH = 1;
+const float TRANSPARENT_COEFF = 0.0;
+const float SPECULAR_COEFF = 0.3;
 
 typedef struct PointLight {
     Vec3f point;
@@ -135,14 +137,20 @@ Vec3f castRayColor(const Vec3f &origin, const Vec3f &dir, const std::vector<Poin
 
             switch (nearest.side) {
                 case 1: { // transparent
-                    color = color + flare_color * FLARE_COEFF + light_color * LIGHT_COEFF + \
-                    castRayColor(nearest.point + dir * 0.001, dir, lightSources, trs, stepOfRecursion) * 0.2;
+                    Vec3f newOrigin = nearest.point + dir * 0.001;
+                    Vec3f trans_color = castRayColor(newOrigin, dir, lightSources, trs, stepOfRecursion);
+                    color = color + flare_color * FLARE_COEFF + light_color * LIGHT_COEFF
+                            + trans_color * TRANSPARENT_COEFF;
                     break;
                 }
                 case -1: { // specular and transparent
-                    color = color + flare_color * FLARE_COEFF + light_color * LIGHT_COEFF + \
-					castRayColor(nearest.point + dir * 0.001, dir, lightSources, trs, stepOfRecursion) * 0.2 + \
-					castRayColor(nearest.point - dir * 0.001, dir - nearest.triangle.normal * 2.0 * (nearest.triangle.normal * dir), lightSources, trs, stepOfRecursion) * 0.3;
+                    Vec3f newOriginSpec = nearest.point - dir * 0.001;
+                    Vec3f newOriginTrans = nearest.point + dir * 0.001;
+                    Vec3f newDir = dir - nearest.triangle.normal * 2.0 * (nearest.triangle.normal * dir);
+                    Vec3f spec_color = castRayColor(newOriginSpec, newDir, lightSources, trs, stepOfRecursion);
+                    Vec3f trans_color = castRayColor(newOriginTrans, dir, lightSources, trs, stepOfRecursion);
+                    color = color + flare_color * FLARE_COEFF + light_color * LIGHT_COEFF
+                            + trans_color * TRANSPARENT_COEFF + spec_color * SPECULAR_COEFF;
                     break;
                 }
             }
