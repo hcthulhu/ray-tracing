@@ -10,9 +10,9 @@
 const float EPSILON = 0.0000001;
 const float FLARE_COEFF = 0.5, FLARE_POW = 100;
 const float LIGHT_BASE = 100, LIGHT_COEFF = 0.5;
-const unsigned int DEPTH = 1;
-const float TRANSPARENT_COEFF = 0.0;
-const float SPECULAR_COEFF = 0.3;
+const unsigned int DEPTH = 4;
+const float TRANSPARENT_COEFF = 0.3;
+const float SPECULAR_COEFF = 0.0;
 
 typedef struct PointLight {
     Vec3f point;

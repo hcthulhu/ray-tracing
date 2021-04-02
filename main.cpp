@@ -68,7 +68,7 @@ int main(int argc, char* argv[]) {
 
 	if (rank == 0) {
 		std::cout << "Time: " << MPI_Wtime() - time << std::endl;
-		char pic[] = "../default.jpg";
+		char pic[] = "../transparent.jpg";
 		saveImage(pic, width, height, 3, pixels);
 	}
 
